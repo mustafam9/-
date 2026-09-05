@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سينما+ | منصة أفلام ومسلسلات</title>
+<style>
+:root{--bg:#08090d;--panel:#11131a;--panel2:#181b24;--text:#f5f5f7;--muted:#9b9eaa;--accent:#e50914;--gold:#ffc857}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+button,input{font:inherit}.nav{height:72px;display:flex;align-items:center;gap:25px;padding:0 6%;position:fixed;top:0;width:100%;z-index:20;background:linear-gradient(#08090df2,#08090d00)}
+.logo{font-size:25px;font-weight:900;color:#fff}.logo span{color:var(--accent)}
+.nav a{color:#ddd;text-decoration:none;font-size:14px;cursor:pointer}.nav a:hover{color:#fff}
+.search{margin-right:auto;background:#151821;border:1px solid #292d38;border-radius:10px;padding:9px 14px;color:#fff;width:210px}
+.hero{min-height:620px;padding:150px 7% 80px;display:flex;align-items:center;background:linear-gradient(90deg,#08090d 5%,#08090db5 48%,#08090d15),linear-gradient(0deg,#08090d 0%,transparent 40%),url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=80') center/cover}
+.hero-content{max-width:650px}.tag{color:var(--gold);font-weight:bold}.hero h1{font-size:58px;margin:12px 0}.hero p{color:#d2d3d8;line-height:1.9;font-size:17px}.meta{color:#bbb;margin:15px 0}.btn{border:0;border-radius:9px;padding:13px 22px;margin-left:8px;cursor:pointer;font-weight:bold}.primary{background:var(--accent);color:#fff}.secondary{background:#fff;color:#111}
+.container{padding:35px 6%}.section-title{display:flex;align-items:center;justify-content:space-between;margin:10px 0 20px}.section-title h2{font-size:23px}.section-title span{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:18px}.card{background:var(--panel);border-radius:12px;overflow:hidden;transition:.2s;cursor:pointer}.card:hover{transform:translateY(-5px);background:var(--panel2)}.poster{height:255px;background-size:cover;background-position:center}.info{padding:12px}.info h3{margin:0 0 7px;font-size:15px}.info small{color:var(--muted)}.rating{color:var(--gold);float:left}
+footer{border-top:1px solid #20232d;color:#777;padding:30px 6%;margin-top:30px;text-align:center}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:50;align-items:center;justify-content:center;padding:20px}.modal-box{width:min(850px,100%);background:#101219;border:1px solid #2b2f39;border-radius:15px;overflow:hidden}.modal-top{height:320px;background-size:cover;background-position:center;padding:25px;display:flex;align-items:end;background-image:linear-gradient(0deg,#101219,transparent 65%),url('https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1200&q=80')}.modal-body{padding:22px}.close{float:left;background:#252832;color:#fff;border:0;border-radius:8px;padding:8px 12px;cursor:pointer}
+
+.video-player{margin-top:18px;background:#000;border-radius:12px;overflow:hidden;border:1px solid #292d38}
+.video-player video{display:block;width:100%;max-height:520px;background:#000}
+.player-toolbar{display:flex;gap:10px;align-items:center;padding:10px 12px;background:#11131a}
+.player-toolbar select,.player-toolbar button{background:#252832;color:#fff;border:1px solid #363a46;border-radius:7px;padding:7px 10px;cursor:pointer}
+.player-toolbar span{color:#9b9eaa;font-size:12px}
+@media(max-width:700px){.nav{padding:0 4%;gap:12px}.nav a{display:none}.search{width:150px}.hero{min-height:570px;padding:130px 5% 55px}.hero h1{font-size:39px}.grid{grid-template-columns:repeat(2,1fr);gap:12px}.poster{height:220px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="logo">سينما<span>+</span></div>
+  <a onclick="scrollToId('home')">الرئيسية</a><a onclick="scrollToId('movies')">الأفلام</a><a onclick="scrollToId('series')">المسلسلات</a><a onclick="scrollToId('new')">الجديد</a>
+  <input class="search" id="search" placeholder="ابحث عن فيلم أو مسلسل..." oninput="filterCards()">
+</nav>
+
+<section class="hero" id="home">
+ <div class="hero-content">
+  <div class="tag">★ الاختيار المميز لهذا الأسبوع</div>
+  <h1>تجربة سينمائية بلا حدود</h1>
+  <div class="meta">2026 • أكشن • خيال علمي • 2س 18د • +13</div>
+  <p>اكتشف مكتبة ضخمة من الأفلام والمسلسلات بواجهة عصرية، وقوائم مخصصة، وتفاصيل كاملة لكل عمل.</p>
+  <button class="btn primary" onclick="openFeatured()">▶ ابدأ المشاهدة</button>
+  <button class="btn secondary" onclick="openFeatured()">ⓘ التفاصيل</button>
+ </div>
+</section>
+
+<main class="container">
+<section id="movies"><div class="section-title"><h2>🔥 أفلام رائجة</h2><span>عرض الكل</span></div><div class="grid" id="movieGrid"></div></section>
+<section id="series" style="margin-top:45px"><div class="section-title"><h2>📺 مسلسلات مختارة</h2><span>عرض الكل</span></div><div class="grid" id="seriesGrid"></div></section>
+<section id="new" style="margin-top:45px"><div class="section-title"><h2>✨ أضيف حديثًا</h2><span>هذا الشهر</span></div><div class="grid" id="newGrid"></div></section>
+</main>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box">
+ <div class="modal-top"><div><button class="close" onclick="closeModal()">✕</button><h1 id="modalTitle">العنوان</h1></div></div>
+ <div class="modal-body"><p id="modalText"></p>
+<div class="video-player" id="videoPlayer" style="display:none">
+  <video id="cinemaVideo" controls playsinline preload="metadata" poster="">
+    <source id="videoSource" src="" type="video/mp4">
+    متصفحك لا يدعم تشغيل الفيديو.
+  </video>
+  <div class="player-toolbar">
+    <button onclick="toggleFullscreen()">⛶ ملء الشاشة</button>
+    <select id="qualitySelect" onchange="changeQuality(this.value)">
+      <option value="">الجودة</option>
+      <option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option>
+    </select>
+    <span id="playerStatus">جاهز للتشغيل</span>
+  </div>
+</div>
+<button class="btn primary" onclick="startPlayback()">▶ تشغيل</button></div>
+</div></div>
+<footer>© 2026 سينما+ — واجهة تجريبية قابلة للتطوير إلى منصة كاملة.</footer>
+
+<script>
+let titles=[];
+let activeTitle=null;
+
+async function loadTitles(){
+  const res=await fetch('/api/titles');
+  if(!res.ok) throw new Error('تعذر الاتصال بالـBackend');
+  titles=await res.json();
+  const movies=titles.filter(x=>x.type==='movie');
+  const series=titles.filter(x=>x.type==='series');
+  const newer=titles.slice(0,4);
+  renderApi(movies,'movieGrid'); renderApi(series,'seriesGrid'); renderApi(newer,'newGrid');
+}
+function renderApi(arr,id){
+  document.getElementById(id).innerHTML=arr.map(x=>`<article class="card" data-name="${escapeHtml(x.title.toLowerCase())}" onclick="openModal(${x.id})"><div class="poster" style="background-image:url('${x.poster_url||''}')"></div><div class="info"><span class="rating">★ ${x.rating}</span><h3>${escapeHtml(x.title)}</h3><small>${x.year}</small></div></article>`).join('');
+}
+function escapeHtml(v){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+loadTitles().catch(err=>alert(err.message));
+
+let activeTitle='';
+async function openModal(id){
+ const item=titles.find(x=>x.id===Number(id));
+ if(!item)return;
+ activeTitle=item;
+ document.getElementById('modalTitle').textContent=item.title;
+ document.getElementById('modalText').textContent=item.description || 'لا يوجد وصف.';
+ document.getElementById('videoPlayer').style.display='none';
+ document.getElementById('modal').style.display='flex';
+}
+async function startPlayback(){
+ if(!activeTitle)return;
+ const src=activeTitle.video_url;
+ if(!src){document.getElementById('playerStatus').textContent='لا يوجد فيديو لهذا العمل';return;}
+ const v=document.getElementById('cinemaVideo');
+ document.getElementById('videoSource').src=src;
+ v.load();
+ document.getElementById('videoPlayer').style.display='block';
+ v.play().catch(()=>{});
+ document.getElementById('playerStatus').textContent='تشغيل: '+activeTitle.title;
+ try { const p=await fetch(`/api/titles/${activeTitle.id}/progress`); const data=await p.json(); if(data.position_seconds>0) v.currentTime=data.position_seconds; } catch(e){}
+}
+function toggleFullscreen(){
+ const box=document.getElementById('videoPlayer');
+ if(document.fullscreenElement) document.exitFullscreen(); else box.requestFullscreen?.();
+}
+function changeQuality(value){
+ if(!value||!activeTitle)return;
+ const map={'1080':activeTitle.video_url,'720':activeTitle.video_720_url||activeTitle.video_url,'480':activeTitle.video_480_url||activeTitle.video_url};
+ const v=document.getElementById('cinemaVideo'); const wasPlaying=!v.paused; const pos=v.currentTime; const src=map[value]; if(!src)return;
+ document.getElementById('videoSource').src=src; v.load(); v.currentTime=pos; if(wasPlaying)v.play().catch(()=>{});
+ document.getElementById('playerStatus').textContent='الجودة: '+value+'p';
+}
+function openFeatured(){ const item=titles.find(x=>x.title==='المدينة المظلمة') || titles[0]; if(item)openModal(item.id); }
+async function saveProgress(){ if(!activeTitle)return; const v=document.getElementById('cinemaVideo'); if(!v.duration)return; fetch(`/api/titles/${activeTitle.id}/progress`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({position_seconds:v.currentTime})}).catch(()=>{}); }
+setInterval(saveProgress,10000);
+function closeModal(){saveProgress(); const v=document.getElementById('cinemaVideo'); v.pause(); v.removeAttribute('src'); v.load(); document.getElementById('modal').style.display='none'}
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+function filterCards(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.card').forEach(c=>c.style.display=c.dataset.name.includes(q)?'block':'none')}
+</script>
+</body>
+</html>
